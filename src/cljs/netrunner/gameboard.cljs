@@ -300,9 +300,9 @@
 
 (defn get-message-parts-impl [text]
   (let [with-image-codes (add-image-codes (if (nil? text) "" text))
-        splitted (.split with-image-codes (js/RegExp. (str "(" ci-open "[^" ci-close "]*" ci-close ")") "g"))
+        splitted (split with-image-codes (re-pattern (str "(" ci-open "[^" ci-close "]*" ci-close ")")))
         oldstyle (for [i splitted]
-                   (seq (.split i (js/RegExp. (str "([1-3]\\[mu\\]|\\[[^\\]]*\\])") "g"))))]
+                   (seq (split i #"([1-3]\[mu\]|\[[^\]]*\])")))]
     (flatten oldstyle)))
 
 (def get-message-parts (memoize get-message-parts-impl))
