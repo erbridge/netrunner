@@ -6,7 +6,7 @@
                                 is-remote? is-central? get-server-type other-side same-card? same-side?
                                 combine-subtypes remove-subtypes]]
             [game.macros :refer [effect req msg when-completed final-effect continue-ability]]
-            [clojure.string :refer [join lower-case split split-lines starts-with?]]
+            [clojure.string :refer [join lower-case split split-lines starts-with? trim]]
             [clojure.core.match :refer [match]]))
 
 (def all-cards (atom {}))

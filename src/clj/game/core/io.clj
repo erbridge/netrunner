@@ -7,7 +7,7 @@
   __system__ shows no user name."
   [state side {:keys [user text]}]
   (let [author (or user (get-in @state [side :user]))
-        text (if (= (.trim text) "null") " null" text)]
+        text (if (= (trim text) "null") " null" text)]
     (if-let [command (parse-command text)]
       (when (and (not= side nil) (not= side :spectator))
         (command state side)

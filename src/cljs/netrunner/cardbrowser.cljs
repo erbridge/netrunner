@@ -1,7 +1,7 @@
 (ns netrunner.cardbrowser
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [cljs.core.async :refer [chan put!]]
-            [clojure.string :refer [index-of lower-case]]
+            [clojure.string :refer [index-of lower-case trim]]
             [om.core :as om :include-macros true]
             [sablono.core :as sab :include-macros true]
             [netrunner.ajax :refer [GET]]
@@ -164,7 +164,7 @@
          [:div
           [:h4 "Sort by"]
           [:select {:value (:sort-filter state)
-                    :on-change #(om/set-state! owner :sort-field (.trim (.. % -target -value)))}
+                    :on-change #(om/set-state! owner :sort-field (trim (.. % -target -value)))}
            (for [field ["Faction" "Name" "Type" "Influence" "Cost" "Set number"]]
              [:option {:value field} field])]]
 
