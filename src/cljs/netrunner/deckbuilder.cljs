@@ -7,7 +7,8 @@
             [netrunner.ajax :refer [GET POST]]
             [netrunner.appstate :refer [app-state]]
             [netrunner.auth :refer [authenticated]]
-            [netrunner.cardbrowser :refer [cards-channel card-view image-url]]))
+            [netrunner.cardbrowser :refer [cards-channel card-view image-url
+                                           search]]))
 
 (def select-channel (chan))
 (def zoom-channel (chan))
@@ -54,9 +55,6 @@
 (defn noinfcost? [identity card]
   (or (= (:faction card) (:faction identity))
       (= 0 (:factioncost card)) (= INFINITY (id-inf-limit identity))))
-
-(defn search [query cards]
-  (filter #(if (= (.indexOf (lower-case (:title %)) query) -1) false true) cards))
 
 (defn alt-art?
   "Removes alt-art cards from the search if user is not :special"
@@ -495,7 +493,7 @@
                                    (not= "Special" (:setname %))
                                    (alt-art? %)))
                      (distinct-by :title))]
-      (take 10 (filter #(not= (.indexOf (lower-case (:title %)) (lower-case query)) -1) cards)))))
+      (take 10 (search (lower-case query) cards)))))
 
 (defn handle-keydown [owner event]
   (let [selected (om/get-state owner :selected)

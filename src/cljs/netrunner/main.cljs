@@ -1,5 +1,6 @@
 (ns netrunner.main
-  (:require [goog.events :as events]
+  (:require [clojure.string :refer [index-of]]
+            [goog.events :as events]
             [goog.history.EventType :as EventType]
             [om.core :as om :include-macros true]
             [sablono.core :as sab :include-macros true]
@@ -13,7 +14,7 @@
 (def history (Html5History.))
 
 (defn navigate [token]
-  (let [page-number (.indexOf tokens token)]
+  (let [page-number (index-of tokens token)]
     (.carousel (js/$ ".carousel") page-number))
   (try (js/ga "send" "pageview" token) (catch js/Error e))
   (.setToken history token)

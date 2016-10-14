@@ -512,7 +512,7 @@
     (is (:runner-phase-12 @state) "Runner in Step 1.2")
     (let [gsec (-> (get-runner) :rig :resource first)]
       (card-ability state :runner gsec 0)
-      (is (pos? (.indexOf (-> (get-runner) :prompt first :msg) "Hedge Fund")) "GSec revealed Hedge Fund")
+      (is (not (nil? (clojure.string/index-of (-> (get-runner) :prompt first :msg) "Hedge Fund"))) "GSec revealed Hedge Fund")
       (core/end-phase-12 state :runner nil)
       (is (= 3 (:click (get-runner))) "Runner lost 1 click from Globalsec Security Clearance"))))
 

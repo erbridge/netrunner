@@ -1,7 +1,7 @@
 (ns netrunner.cardbrowser
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [cljs.core.async :refer [chan put!]]
-            [clojure.string :refer [lower-case]]
+            [clojure.string :refer [index-of lower-case]]
             [om.core :as om :include-macros true]
             [sablono.core :as sab :include-macros true]
             [netrunner.ajax :refer [GET]]
@@ -99,10 +99,13 @@
     cards
     (filter #(= (field %) filter-value) cards)))
 
+(defn search [query cards]
+  (filter #(not (nil? (index-of (lower-case (:title %)) query))) cards))
+
 (defn match [query cards]
   (if (empty? query)
     cards
-    (filter #(if (= (.indexOf (lower-case (:title %)) query) -1) false true) cards)))
+    (search query cards)))
 
 (defn sort-field [fieldname]
   (case fieldname
@@ -189,7 +192,7 @@
                              cycle-sets (set (for [x sets :when (= (:cycle x) s)] (:name x)))
                              cards (if (= s "All")
                                      (:cards cursor)
-                                     (if (= (.indexOf (:set-filter state) "cycle") -1)
+                                     (if (nil? (index-of (:set-filter state) "cycle"))
                                        (filter #(= (:setname %) s) (:cards cursor))
                                        (filter #(cycle-sets (:setname %)) (:cards cursor))))]
                          (->> cards

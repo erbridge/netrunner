@@ -127,8 +127,8 @@
     (command-counter-smart state side args)
     (let [typestr (lower-case (first args))
           value (if-let [n (string->num (second args))] n 0)
-          one-letter (if (<= 1 (.length typestr)) (.substring typestr 0 1) "")
-          two-letter (if (<= 2 (.length typestr)) (.substring typestr 0 2) one-letter)
+          one-letter (if (<= 1 (count typestr)) (subs typestr 0 1) "")
+          two-letter (if (<= 2 (count typestr)) (subs typestr 0 2) one-letter)
           c-type (cond (= "v" one-letter) :virus
                        (= "p" one-letter) :power
                        (= "c" one-letter) :credit

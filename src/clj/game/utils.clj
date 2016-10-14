@@ -1,5 +1,5 @@
 (ns game.utils
-  (:require [clojure.string :refer [join lower-case split-lines split
+  (:require [clojure.string :refer [index-of join lower-case split-lines split
                                     starts-with?]]))
 
 (def cid (atom 0))
@@ -22,7 +22,7 @@
   "Checks the string property of the card to see if it contains the given value"
   [card property value]
   (when-let [p (property card)]
-    (> (.indexOf p value) -1)))
+    (not (nil? (index-of p value)))))
 
 (defn card-is?
   "Checks the property of the card to see if it is equal to the given value,

@@ -1,7 +1,8 @@
 (ns netrunner.gameboard
   (:require-macros [cljs.core.async.macros :refer [go]])
   (:require [cljs.core.async :refer [<! chan put!]]
-            [clojure.string :refer [capitalize includes? join lower-case split]]
+            [clojure.string :refer [capitalize includes? index-of join
+                                    lower-case split]]
             [differ.core :as differ]
             [om.core :as om :include-macros true]
             [sablono.core :as sab :include-macros true]
@@ -245,13 +246,13 @@
 (def ci-close "\u2666")
 
 (defn is-card-item [item]
-  (and (> (.indexOf item ci-seperator) -1)
-       (= 0 (.indexOf item ci-open))))
+  (and (not (nil? (index-of item ci-seperator)))
+       (= 0 (index-of item ci-open))))
 
 (defn extract-card-info [item]
   (if (is-card-item item)
-    [(.substring item 1 (.indexOf item ci-seperator))
-     (.substring item (inc (.indexOf item ci-seperator)) (dec (count item)))]))
+    [(subs item 1 (index-of item ci-seperator))
+     (subs item (inc (index-of item ci-seperator)) (dec (count item)))]))
 
 (defn create-span-impl [item]
   (if (= "[hr]" item)
@@ -475,7 +476,7 @@
       ;; Workshop.
       (not (:installed card)) "Power"
       (not (:subtype card)) "Power"
-      (> (.indexOf (:subtype card) "Virus") -1) "Virus"
+      (not (nil? (index-of (:subtype card) "Virus"))) "Virus"
       :else "Power")))
 
 (defn card-img
