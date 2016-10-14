@@ -1,5 +1,6 @@
 (ns game.utils
-  (:require [clojure.string :refer [split-lines split join lower-case]]))
+  (:require [clojure.string :refer [join lower-case split-lines split
+                                    starts-with?]]))
 
 (def cid (atom 0))
 
@@ -162,7 +163,7 @@
   "Converts a remote zone to a string"
   (let [kw (if (keyword? zone) zone (last zone))
         s (str kw)]
-    (if (.startsWith s ":remote")
+    (if (starts-with? s ":remote")
       (let [num (last (split s #":remote"))]
         (remote-num->name num)))))
 

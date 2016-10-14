@@ -508,7 +508,7 @@
            (which-pile [p1 p2]
              {:prompt "Choose a pile to access"
               :choices [(str "Pile 1 (" (count p1) " cards)") (str "Pile 2 (" (count p2) " cards)")]
-              :effect (req (let [choice (if (.startsWith target "Pile 1") 1 2)]
+              :effect (req (let [choice (if (starts-with? target "Pile 1") 1 2)]
                              (clear-wait-prompt state :corp)
                              (continue-ability state side
                                 (access-pile (if (= 1 choice) p1 p2) choice)
@@ -827,7 +827,7 @@
     :prompt "Choose an identity to become"
     :choices (req (let [is-swappable (fn [c] (and (= "Identity" (:type c))
                                              (= (-> @state :runner :identity :faction) (:faction c))
-                                             (not (.startsWith (:code c) "00")) ; only draft identities have this
+                                             (not (starts-with? (:code c) "00")) ; only draft identities have this
                                              (not (= (:title c) (-> @state :runner :identity :title)))))
                         swappable-ids (filter is-swappable (vals @all-cards))]
                     (cancellable swappable-ids :sorted)))
