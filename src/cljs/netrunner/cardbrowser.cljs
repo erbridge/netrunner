@@ -3,6 +3,7 @@
   (:require [om.core :as om :include-macros true]
             [sablono.core :as sab :include-macros true]
             [cljs.core.async :refer [chan put! >!] :as async]
+            [clojure.string :refer [lower-case]]
             [netrunner.appstate :refer [app-state]]
             [netrunner.ajax :refer [GET]]))
 
@@ -64,7 +65,7 @@
        [:div.heading "Influence "
         [:span.influence
          {:dangerouslySetInnerHTML #js {:__html (apply str (for [i (range influence)] "&#8226;"))}
-          :class (-> card :faction .toLowerCase (.replace " " "-"))}]])
+          :class (-> card :faction lower-case (.replace " " "-"))}]])
      [:div.text
       [:p [:span.type (str (:type card))] (if (empty? (:subtype card))
                                             "" (str ": " (:subtype card)))]
@@ -101,7 +102,7 @@
 (defn match [query cards]
   (if (empty? query)
     cards
-    (filter #(if (= (.indexOf (.toLowerCase (:title %)) query) -1) false true) cards)))
+    (filter #(if (= (.indexOf (lower-case (:title %)) query) -1) false true) cards)))
 
 (defn sort-field [fieldname]
   (case fieldname
@@ -195,7 +196,7 @@
                               (filter-cards (:side-filter state) :side)
                               (filter-cards (:faction-filter state) :faction)
                               (filter-cards (:type-filter state) :type)
-                              (match (.toLowerCase (:search-query state)))
+                              (match (lower-case (:search-query state)))
                               (sort-by (sort-field (:sort-field state)))
                               (take (* (:page state) 28))))
                        {:key :code})]]))))

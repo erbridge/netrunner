@@ -3,7 +3,7 @@
   (:require [om.core :as om :include-macros true]
             [sablono.core :as sab :include-macros true]
             [cljs.core.async :refer [chan put! <! timeout] :as async]
-            [clojure.string :refer [split split-lines join escape]]
+            [clojure.string :refer [split split-lines join lower-case escape]]
             [netrunner.appstate :refer [app-state]]
             [netrunner.auth :refer [authenticated] :as auth]
             [netrunner.cardbrowser :refer [cards-channel image-url card-view] :as cb]
@@ -18,7 +18,7 @@
     (every? #(= (:title %) name) cards)))
 
 (defn found? [query cards]
-  (some #(if (= (.toLowerCase (:title %)) query) %) cards))
+  (some #(if (= (lower-case (:title %)) query) %) cards))
 
 (defn is-draft-id?
   "Check if the specified id is a draft identity"
@@ -56,7 +56,7 @@
       (= 0 (:factioncost card)) (= INFINITY (id-inf-limit identity))))
 
 (defn search [query cards]
-  (filter #(if (= (.indexOf (.toLowerCase (:title %)) query) -1) false true) cards))
+  (filter #(if (= (.indexOf (lower-case (:title %)) query) -1) false true) cards))
 
 (defn alt-art?
   "Removes alt-art cards from the search if user is not :special"
@@ -67,10 +67,10 @@
 (defn lookup
   "Lookup the card title (query) looking at all cards on specified side"
   [side query]
-  (let [q (.toLowerCase query)
+  (let [q (lower-case query)
         cards (filter #(and (= (:side %) side) (alt-art? %))
                       (:cards @app-state))]
-    (if-let [card (some #(when (= (-> % :title .toLowerCase) q) %) cards)]
+    (if-let [card (some #(when (= (-> % :title lower-case) q) %) cards)]
       card
       (loop [i 2 matches cards]
         (let [subquery (subs q 0 i)]
@@ -134,7 +134,7 @@
   [card]
   (if (nil? (:faction card))
     "neutral"
-    (-> card :faction .toLowerCase (.replace " " "-"))))
+    (-> card :faction lower-case (.replace " " "-"))))
 
 (defn allowed?
   "Checks if a card is allowed in deck of a given identity - not accounting for influence"
@@ -495,7 +495,7 @@
                                    (not= "Special" (:setname %))
                                    (alt-art? %)))
                      (distinct-by :title))]
-      (take 10 (filter #(not= (.indexOf (.toLowerCase (:title %)) (.toLowerCase query)) -1) cards)))))
+      (take 10 (filter #(not= (.indexOf (lower-case (:title %)) (lower-case query)) -1) cards)))))
 
 (defn handle-keydown [owner event]
   (let [selected (om/get-state owner :selected)

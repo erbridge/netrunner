@@ -115,7 +115,7 @@
                  :choices {:req #(and (= (:side %) "Runner") (:installed %))}
                  :effect (effect (trash target)
                                  (resolve-ability
-                                   {:prompt "Draw 1 card or remove 1 tag" :msg (msg (.toLowerCase target))
+                                   {:prompt "Draw 1 card or remove 1 tag" :msg (msg (lower-case target))
                                     :choices ["Draw 1 card" "Remove 1 tag"]
                                     :effect (req (if (= target "Draw 1 card")
                                                    (draw state side)

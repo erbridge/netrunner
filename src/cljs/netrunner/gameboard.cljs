@@ -199,7 +199,7 @@
         (send-command "select" {:card card})
         ;; Card is an identity of player's side
         (and (= (:type card) "Identity")
-             (= side (keyword (.toLowerCase (:side card)))))
+             (= side (keyword (lower-case (:side card)))))
         (handle-abilities card owner)
         ;; Runner side
         (= side :runner)
@@ -229,13 +229,13 @@
 
 (defn in-play? [card]
   (let [dest (when (= (:side card) "Runner")
-               (get-in @game-state [:runner :rig (keyword (.toLowerCase (:type card)))]))]
+               (get-in @game-state [:runner :rig (keyword (lower-case (:type card)))]))]
     (some #(= (:title %) (:title card)) dest)))
 
 (defn playable? [{:keys [title side zone cost type uniqueness abilities] :as card}]
   (let [my-side (:side @game-state)
         me (my-side @game-state)]
-    (and (= (keyword (.toLowerCase side)) my-side)
+    (and (= (keyword (lower-case side)) my-side)
          (and (= zone ["hand"])
               (or (not uniqueness) (not (in-play? card)))
               (or (#{"Agenda" "Asset" "Upgrade" "ICE"} type) (>= (:credit me) cost))
@@ -518,13 +518,13 @@
                               :on-drag-start #(handle-dragstart % cursor)
                               :on-drag-end #(-> % .-target js/$ (.removeClass "dragged"))
                               :on-mouse-enter #(when (or (not (or flipped facedown))
-                                                         (= (:side @game-state) (keyword (.toLowerCase side))))
+                                                         (= (:side @game-state) (keyword (lower-case side))))
                                                 (put! zoom-channel cursor))
                               :on-mouse-leave #(put! zoom-channel false)
                               :on-click #(handle-card-click @cursor owner)}
         (when-let [url (image-url cursor (keyword (lower-case (:side cursor))))]
           (if (or (not code) flipped facedown)
-            [:img.card.bg {:src (str "/img/" (.toLowerCase side) ".png")}]
+            [:img.card.bg {:src (str "/img/" (lower-case side) ".png")}]
             [:div
              [:span.cardname title]
              [:img.card.bg {:src url :onError #(-> % .-target js/$ .hide)}]]))
@@ -656,7 +656,7 @@
                                 (and (get-in @game-state [:options :spectatorhands])
                                      (not (not-spectator? game-state app-state))))
                           (om/build card-view (assoc card :remotes remotes))
-                          [:img.card {:src (str "/img/" (.toLowerCase side) ".png")}])])
+                          [:img.card {:src (str "/img/" (lower-case side) ".png")}])])
                      (:hand player))]
        (om/build label (:hand player) {:opts {:name name}})]))))
 
@@ -781,7 +781,7 @@
                         [:div.card-wrapper {:style {:left (* (/ 128 size) i)}}
                          (if (= (:user player) (:user @app-state))
                            (om/build card-view card)
-                           [:img.card {:src (str "/img/" (.toLowerCase side) ".png")}])])
+                           [:img.card {:src (str "/img/" (lower-case side) ".png")}])])
                       cards)
          (om/build label cards {:opts {:name name}})])))))
 

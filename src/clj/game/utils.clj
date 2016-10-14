@@ -1,5 +1,5 @@
 (ns game.utils
-  (:require [clojure.string :refer [split-lines split join]]))
+  (:require [clojure.string :refer [split-lines split join lower-case]]))
 
 (def cid (atom 0))
 
@@ -30,7 +30,7 @@
   (let [cv (property card)]
     (cond
       (or (keyword? cv) (and (string? value) (string? cv))) (= value cv)
-      (and (keyword? value) (string? cv)) (= value (keyword (.toLowerCase cv)))
+      (and (keyword? value) (string? cv)) (= value (keyword (lower-case cv)))
       :else (= value cv))))
 
 (defn zone
@@ -42,7 +42,7 @@
 
 (defn to-keyword [string]
   (if (string? string)
-    (keyword (.toLowerCase string))
+    (keyword (lower-case string))
     string))
 
 (defn capitalize [string]
