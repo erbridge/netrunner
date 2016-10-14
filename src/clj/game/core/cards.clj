@@ -9,7 +9,7 @@
   "Retrieves a card's abilities definition map."
   [card]
   (when-let [title (:title card)]
-    (cards (.replace title "'" ""))))
+    (cards (clojure.string/replace title "'" ""))))
 
 (defn find-cid
   "Return a card with specific :cid from given sequence"

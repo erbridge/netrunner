@@ -134,7 +134,7 @@
   [card]
   (if (nil? (:faction card))
     "neutral"
-    (-> card :faction lower-case (.replace " " "-"))))
+    (-> card :faction lower-case (clojure.string/replace " " "-"))))
 
 (defn allowed?
   "Checks if a card is allowed in deck of a given identity - not accounting for influence"

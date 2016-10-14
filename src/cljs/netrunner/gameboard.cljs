@@ -290,7 +290,7 @@
 (def card-image-token (memoize card-image-token-impl))
 
 (defn card-image-reducer [text card]
-  (.replace text (js/RegExp. (find-card-regex (:title card)) "g") (card-image-token (:title card) (:code card))))
+  (clojure.string/replace text (find-card-regex (:title card)) (card-image-token (:title card) (:code card))))
 
 (defn add-image-codes-impl [text]
   (reduce card-image-reducer text (prepared-cards)))

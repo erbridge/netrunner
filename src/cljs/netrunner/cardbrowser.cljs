@@ -18,25 +18,25 @@
       (swap! app-state assoc :cards cards)
       (put! cards-channel cards)))
 
-(defn make-span [text symbol class]
-  (.replace text (js/RegExp. symbol "g") (str "<span class='anr-icon " class "'></span>")))
+(defn iconify [text symbol class]
+  (clojure.string/replace text symbol (str "<span class='anr-icon " class "'></span>")))
 
 (defn image-url [card]
   (str "/img/cards/" (:code card) ".png"))
 
 (defn add-symbols [card-text]
   (-> (if (nil? card-text) "" card-text)
-      (make-span "\\[Credits\\]" "credit")
-      (make-span "\\[Credit\\]" "credit")
-      (make-span "\\[Click\\]" "click")
-      (make-span "\\[Subroutine\\]" "subroutine")
-      (make-span "\\[Recurring Credits\\]" "recurring-credit")
-      (make-span "1\\[Memory Unit\\]" "mu1")
-      (make-span "2\\[Memory Unit\\]" "mu2")
-      (make-span "3\\[Memory Unit\\]" "mu3")
-      (make-span "\\[Memory Unit\\]" "mu")
-      (make-span "\\[Link\\]" "link")
-      (make-span "\\[Trash\\]" "trash")))
+      (iconify "[Credits]" "credit")
+      (iconify "[Credit]" "credit")
+      (iconify "[Click]" "click")
+      (iconify "[Subroutine]" "subroutine")
+      (iconify "[Recurring Credits]" "recurring-credit")
+      (iconify "1[Memory Unit]" "mu1")
+      (iconify "2[Memory Unit]" "mu2")
+      (iconify "3[Memory Unit]" "mu3")
+      (iconify "[Memory Unit]" "mu")
+      (iconify "[Link]" "link")
+      (iconify "[Trash]" "trash")))
 
 (defn card-view [card owner]
   (om/component
@@ -65,7 +65,7 @@
        [:div.heading "Influence "
         [:span.influence
          {:dangerouslySetInnerHTML #js {:__html (apply str (for [i (range influence)] "&#8226;"))}
-          :class (-> card :faction lower-case (.replace " " "-"))}]])
+          :class (-> card :faction lower-case (clojure.string/replace " " "-"))}]])
      [:div.text
       [:p [:span.type (str (:type card))] (if (empty? (:subtype card))
                                             "" (str ": " (:subtype card)))]
@@ -184,8 +184,8 @@
         [:div.card-list {:on-scroll #(handle-scroll % owner state)}
          (om/build-all card-view
                        (let [s (-> (:set-filter state)
-                                     (.replace "&nbsp;&nbsp;&nbsp;&nbsp;" "")
-                                     (.replace " cycle" ""))
+                                     (clojure.string/replace "&nbsp;&nbsp;&nbsp;&nbsp;" "")
+                                     (clojure.string/replace " cycle" ""))
                              cycle-sets (set (for [x sets :when (= (:cycle x) s)] (:name x)))
                              cards (if (= s "All")
                                      (:cards cursor)

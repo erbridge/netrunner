@@ -54,7 +54,7 @@
       (deduce state side [kw (- delta)])
       (swap! state update-in [side kw] (partial + delta)))
     (system-msg state side
-                (str "sets " (.replace key "-" " ") " to " (get-in @state [side kw])
+                (str "sets " (clojure.string/replace key "-" " ") " to " (get-in @state [side kw])
                      " (" (if (pos? delta) (str "+" delta) delta) ")"))))
 
 (defn move-card
