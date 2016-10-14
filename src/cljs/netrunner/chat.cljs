@@ -1,10 +1,10 @@
 (ns netrunner.chat
   (:require-macros [cljs.core.async.macros :refer [go]])
-  (:require [om.core :as om :include-macros true]
+  (:require [cljs.core.async :refer [<! chan put!]]
+            [om.core :as om :include-macros true]
             [sablono.core :as sab :include-macros true]
-            [cljs.core.async :refer [chan put! <!] :as async]
-            [netrunner.auth :refer [avatar authenticated] :as auth]
-            [netrunner.ajax :refer [GET]]))
+            [netrunner.ajax :refer [GET]]
+            [netrunner.auth :refer [authenticated avatar]]))
 
 (def app-state
   (atom {:channels {:general [] :america [] :europe [] :asia-pacific [] :united-kingdom [] :français []

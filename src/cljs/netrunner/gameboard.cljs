@@ -1,14 +1,13 @@
 (ns netrunner.gameboard
   (:require-macros [cljs.core.async.macros :refer [go]])
-  (:require [om.core :as om :include-macros true]
-            [sablono.core :as sab :include-macros true]
-            [cljs.core.async :refer [chan put! <!] :as async]
+  (:require [cljs.core.async :refer [<! chan put!]]
             [clojure.string :refer [capitalize includes? join lower-case split]]
-            [netrunner.appstate :refer [app-state]]
-            [netrunner.auth :refer [avatar] :as auth]
-            [netrunner.cardbrowser :refer [add-symbols] :as cb]
             [differ.core :as differ]
-            [om.dom :as dom]))
+            [om.core :as om :include-macros true]
+            [sablono.core :as sab :include-macros true]
+            [netrunner.appstate :refer [app-state]]
+            [netrunner.auth :refer [avatar]]
+            [netrunner.cardbrowser :refer [add-symbols] :as cb]))
 
 (defonce game-state (atom {}))
 (defonce last-state (atom {}))
@@ -416,15 +415,15 @@
 
 (defn ability-costs [ab]
   (when-let [cost (:cost ab)]
-    (str (clojure.string/join
+    (str (join
            ", " (for [c (partition 2 cost)]
                   (str (case (first c)
                          "credit" (str (second c) " [" (capitalize (name (first c))) "]")
-                         (clojure.string/join "" (repeat (second c) (str "[" (capitalize (name (first c))) "]")))
+                         (join "" (repeat (second c) (str "[" (capitalize (name (first c))) "]")))
                          )))) ": ")))
 
 (defn remote->num [server]
-  (-> server str (clojure.string/split #":remote") last js/parseInt))
+  (-> server str (split #":remote") last js/parseInt))
 
 (defn remote->name [server]
   (let [num (remote->num server)]
@@ -449,7 +448,7 @@
     :rd -2
     :hq -1
     (js/parseInt
-      (last (clojure.string/split (str zone) #":remote")))))
+      (last (split (str zone) #":remote")))))
 
 (defn zones->sorted-names [zones]
   (->> zones (sort-by zone->sort-key) (map zone->name)))

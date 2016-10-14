@@ -1,14 +1,14 @@
 (ns netrunner.gamelobby
   (:require-macros [cljs.core.async.macros :refer [go]])
-  (:require [om.core :as om :include-macros true]
-            [sablono.core :as sab :include-macros true]
-            [cljs.core.async :refer [chan put! <!] :as async]
+  (:require [cljs.core.async :refer [<! chan put!]]
             [clojure.string :refer [join]]
+            [om.core :as om :include-macros true]
+            [sablono.core :as sab :include-macros true]
             [netrunner.appstate :refer [app-state]]
-            [netrunner.auth :refer [authenticated avatar] :as auth]
-            [netrunner.gameboard :refer [init-game game-state]]
-            [netrunner.cardbrowser :refer [image-url] :as cb]
-            [netrunner.deckbuilder :refer [deck-status-span deck-status-label]]))
+            [netrunner.auth :refer [authenticated avatar]]
+            [netrunner.cardbrowser :refer [image-url]]
+            [netrunner.deckbuilder :refer [deck-status-label deck-status-span]]
+            [netrunner.gameboard :refer [game-state init-game]]))
 
 (def socket-channel (chan))
 (def socket (.connect js/io (str js/iourl "/lobby")))

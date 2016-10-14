@@ -1,13 +1,13 @@
 (ns netrunner.deckbuilder
   (:require-macros [cljs.core.async.macros :refer [go]])
-  (:require [om.core :as om :include-macros true]
+  (:require [cljs.core.async :refer [<! chan put! timeout]]
+            [clojure.string :refer [escape join lower-case split split-lines]]
+            [om.core :as om :include-macros true]
             [sablono.core :as sab :include-macros true]
-            [cljs.core.async :refer [chan put! <! timeout] :as async]
-            [clojure.string :refer [split split-lines join lower-case escape]]
+            [netrunner.ajax :refer [GET POST]]
             [netrunner.appstate :refer [app-state]]
-            [netrunner.auth :refer [authenticated] :as auth]
-            [netrunner.cardbrowser :refer [cards-channel image-url card-view] :as cb]
-            [netrunner.ajax :refer [POST GET]]))
+            [netrunner.auth :refer [authenticated]]
+            [netrunner.cardbrowser :refer [cards-channel card-view image-url]]))
 
 (def select-channel (chan))
 (def zoom-channel (chan))

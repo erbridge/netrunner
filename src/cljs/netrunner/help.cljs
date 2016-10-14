@@ -1,7 +1,6 @@
 (ns netrunner.help
   (:require [om.core :as om :include-macros true]
-            [sablono.core :as sab :include-macros true]
-            [clojure.string :refer [split]]))
+            [sablono.core :as sab :include-macros true]))
 
 (def app-state (atom {}))
 
@@ -74,8 +73,7 @@
              :title "Is there more documentation on how to use Jinteki.net?"
              :content [:p "Read the "
                        [:a {:href "https://github.com/mtgred/netrunner/wiki/Jinteki.net-Guide" :target "_blank"}
-                        "Jinteki.net Guide"] " on the GitHub wiki."]}
-            )}
+                        "Jinteki.net Guide"] " on the GitHub wiki."]})}
     {:id "beginners"
      :title "Beginners"
      :sub (list
@@ -108,8 +106,7 @@
                         [:li [:a {:href "http://forum.stimhack.com/"} "Stimhack forums"]]
                         [:li [:a {:href "http://reddit.com/r/netrunner/"} "/r/netrunner subreddit"]]
                         [:li "multiple Facebook groups, such as "
-                         [:a {:href "https://www.facebook.com/groups/netrunnergeeks/"} "Netrunner Geeks"]]]]}
-            )}
+                         [:a {:href "https://www.facebook.com/groups/netrunnergeeks/"} "Netrunner Geeks"]]]]})}
     {:id "site"
      :title "Website"
      :sub (list
@@ -147,9 +144,7 @@
                             [:p "Games with players not able or willing to follow above recommendations are probably better suited to the Casual room. "
                              "Some examples would be: learning the game, learning the site's interface, testing a completely new and crazy deck idea, "
                              "testing future spoilers, playing on a touchscreen, playing at work and likely to have to quit on short notice, etc. "
-                             "All of these circumstances may cause needless frustration of players expecting to play a game in a competitive setting."])}
-
-            )}
+                             "All of these circumstances may cause needless frustration of players expecting to play a game in a competitive setting."])})}
     {:id "cards"
      :title "Cards and Specific Interactions"
      :sub (list
@@ -185,8 +180,7 @@
              :title "How do I change my decks to use alternative art versions of cards (or promotional ones)?"
              :content [:p "Alternative art cards are enabled for the " [:a {:href "#donations"} "donators"] " and "
                        [:a {:href "#devs"} "developers"] " of the site. If you belong to one of the aforementioned groups and you feel like you should have them enabled, "
-                       "but you don't, " [:a {:href "/about"} "contact us"] "."]}
-             )}
+                       "but you don't, " [:a {:href "/about"} "contact us"] "."]})}
     {:id "troubleshooting"
      :title "Troubleshooting"
      :sub (list
@@ -208,8 +202,7 @@
             {:id "zerogames"
              :title "Whenever I connect to the site, I see there are 0 games in the lobby."
              :content [:p "This is most likely a websocket issue. Check if your network filters let through traffic from ws.jinteki.net. "
-                       "Whitelisting *.jinteki.net should solve the problem."]}
-            )}
+                       "Whitelisting *.jinteki.net should solve the problem."]})}
     {:id "getinvolved"
      :title "Getting Involved"
      :sub (list
@@ -237,16 +230,15 @@
                              "to Jinteki.net Slack, so you can get in better contact with the dev team."])}
             {:id "awesome"
              :title "Why is this site so awesome?"
-             :content [:p "Because We Built It."]}
-            )}))
+             :content [:p "Because We Built It."]})}))
 
 (def help-toc
   "Generates list serving as help's table of contents. Parses help-data."
   [:nav {:role "navigation" :class "table-of-contents"}
-    [:ul (for [{:keys [id title sub] :as section} help-data]
-      [:li [:a (when id {:href (str "#" id)}) title]
-       [:ul (for [{:keys [id title] :as question} sub]
-              [:li [:a (when id {:href (str "#" id)}) title]])]])]])
+   [:ul (for [{:keys [id title sub] :as section} help-data]
+          [:li [:a (when id {:href (str "#" id)}) title]
+           [:ul (for [{:keys [id title] :as question} sub]
+                  [:li [:a (when id {:href (str "#" id)}) title]])]])]])
 
 (def help-contents
   "Takes help-data and translates it to HTML tags."
@@ -259,9 +251,9 @@
 (defn help [cursor owner]
   (om/component
     (sab/html
-      [:div.help.panel.blue-shade
-       [:h2 "Help Topics"]
-       help-toc
-       help-contents])))
+     [:div.help.panel.blue-shade
+      [:h2 "Help Topics"]
+      help-toc
+      help-contents])))
 
 (om/root help app-state {:target (. js/document (getElementById "help"))})

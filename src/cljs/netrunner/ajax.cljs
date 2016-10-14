@@ -1,6 +1,6 @@
 (ns netrunner.ajax
   (:require-macros [cljs.core.async.macros :refer [go]])
-  (:require [cljs.core.async :refer [chan put!] :as async]
+  (:require [cljs.core.async :refer [chan put!]]
             [goog.net.XhrIo :as xhr]
             [goog.json :as json]))
 
@@ -18,12 +18,12 @@
 
 (defn POST
   ([url params]
-     (let [ch (chan)]
-       (xhr/send url #(put! ch (parse %)) "POST" params)
-       ch))
+   (let [ch (chan)]
+     (xhr/send url #(put! ch (parse %)) "POST" params)
+     ch))
   ([url params format]
-     (let [ch (chan)
-           headers (when (= format :json) #js {"Content-Type" "application/json"})
-           content (if (= format :json) (json/serialize (clj->js params)) params)]
-       (xhr/send url #(put! ch (parse %)) "POST" content headers)
-       ch)))
+   (let [ch (chan)
+         headers (when (= format :json) #js {"Content-Type" "application/json"})
+         content (if (= format :json) (json/serialize (clj->js params)) params)]
+     (xhr/send url #(put! ch (parse %)) "POST" content headers)
+     ch)))

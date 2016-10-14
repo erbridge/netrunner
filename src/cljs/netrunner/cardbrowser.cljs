@@ -1,11 +1,11 @@
 (ns netrunner.cardbrowser
   (:require-macros [cljs.core.async.macros :refer [go]])
-  (:require [om.core :as om :include-macros true]
-            [sablono.core :as sab :include-macros true]
-            [cljs.core.async :refer [chan put! >!] :as async]
+  (:require [cljs.core.async :refer [chan put!]]
             [clojure.string :refer [lower-case]]
-            [netrunner.appstate :refer [app-state]]
-            [netrunner.ajax :refer [GET]]))
+            [om.core :as om :include-macros true]
+            [sablono.core :as sab :include-macros true]
+            [netrunner.ajax :refer [GET]]
+            [netrunner.appstate :refer [app-state]]))
 
 (def cards-channel (chan))
 
